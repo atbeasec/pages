@@ -1,2 +1,2 @@
 # pages
-Github website for CIS255
+Github website for CIS-255
