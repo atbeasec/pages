@@ -1,0 +1,33 @@
+
+td{max-width:40px
+}
+
+input{ width: 108%;
+background-color:#B7B1B1;
+}
+
+#top{color:#9AFE76;
+ font-weight: bold;}
+
+table {background-color:#B7B1B1;
+border:6px solid black;
+}
+
+table td{border:2px solid black;}
+
+#team2{ color:blue;
+width: 11%;
+ font-weight: bold;}
+
+#team1{color:red;
+ font-weight: bold;}
+
+#team1output{color:purple;}
+
+#team2output{color:green;}
+
+heading{
+font-family: 'Verdana';
+font-style: oblique;
+font-size: 40px;
+}
