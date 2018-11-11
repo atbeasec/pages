@@ -196,16 +196,48 @@ function genObjectArray() {
       'monthnumber' :parseInt(document.getElementById("monthnumber"+i).value)?parseInt(document.getElementById("monthnumber"+i).value):0,
       'yearnumber'  :parseInt(document.getElementById("yearnumber"+i).value)?parseInt(document.getElementById("yearnumber"+i).value):0,
       'country'     :document.getElementById("country"+i).value,
+      'countryage' :function() { //local age based on country
+        var currentTime = new Date();
+        var currentyear = currentTime.getFullYear();
+        var age = this.yearnumber;
+        if(this.country == 'China')
+          return ((currentyear-age)+1);
+        else
+          return (currentyear-age);
+      },
+      'countryname' :function(){ //local name based on country
+        if(this.country == 'China')
+          return (this.lname+" "+this.fname);
+        else
+          return (this.fname+" "+this.lname);
+      },
+      'zodiac' :function(){ //zodiac function, chinese zodiac if country == China, or western zodiac if country == USA
+        if(this.country == 'China'){
+        var ChineseZodiac = {animals : [ "Rooster", "Boar","Dog",  "Rat", "Tiger","Ox",  "Monkey","Rabbit", "Dragon", "Snake", "Horse", "Sheep"]};
+		return ChineseZodiac.animals[(this.yearnumber % ChineseZodiac.animals.length)];}
+          else{
+            var zodiac =['', 'Capricorn', 'Aquarius', 'Pisces', 'Aries', 'Taurus', 'Gemini', 
+                    'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn'];
+        var last_day =['', 19, 18, 20, 20, 21, 21, 22, 22, 21, 22, 21, 20, 19];
+        return (this.daynumber > last_day[this.monthnumber]) ? zodiac[this.monthnumber*1 + 1] : zodiac[this.monthnumber];
+          }
+      }, 
+      'localbirth' :function(){ //local birth fuction based on country
+         if(this.country == 'China')
+    return(this.yearnumber+"-"+this.monthnumber+"-"+this.daynumber); 
+  else
+    return(this.monthnumber+"-"+this.daynumber+"-"+this.yearnumber);
+      }
 	};
 	// display objArray
 	var divContent = "<ol start='0'>";
 	objArray.forEach(function(e) {
 		divContent += '<li>';
-		divContent += JSON.stringify(e);
-    divContent += '..... countryage() == ' + countryage(e.country, e.yearnumber);
-    divContent += '..... countryname() == ' + countryname(e.country, e.fname, e.lname);
-     divContent += '..... zodiac() == ' + zodiac(e.country,e.yearnumber,e.monthnumber,e.daynumber);
-     divContent += '..... localbirth() ==' + localbirth(e.country,e.daynumber,e.monthnumber,e.yearnumber);
+		divContent += JSON.stringify(e);  
+    divContent += '.... countryage() == ' + e.countryage(); //calling methods to show localized data
+    divContent += '.....countryname() ==' + e.countryname();
+     divContent += '.... zodiac() == ' + e.zodiac();
+     divContent += '.... localbirth() ==' + e.localbirth();
 		divContent += '</li>';
 	});
 	document.getElementById("div2").innerHTML = divContent;
@@ -239,77 +271,34 @@ function genTable(){
         var cell4 = row.insertCell(3);      
         cell4.setAttribute("id","zodiac");
         cell4.innerHTML = "Zodiac";
+  
+  
   for (i=0; i<arraylength;i++){ //loop to go through all of Object Array
-
+    
     var row1 = table.insertRow(i+1); //create row for name, checks country and stores correct layout into cell
     var cell1 = row1.insertCell(0);
     cell1.setAttribute("id","name1");
-    cell1.innerHTML = countryname(objArray[i].country,objArray[i].fname,objArray[i].lname);
-
+    cell1.innerHTML = objArray[i].countryname();//using dot innerHTML to set countryname
+    
+    
     //create cell for birthday, sets variables for each variable, and sets it to appropriate orrientation based on country
     var cellbirth = row1.insertCell(1);
     cellbirth.setAttribute("id","birth");
-    cellbirth.innerHTML=localbirth(objArray[i].country,objArray[i].daynumber,objArray[i].monthnumber,objArray[i].yearnumber);
-
+    cellbirth.innerHTML=objArray[i].localbirth();//using dot innerHTML to set localbirth
+    
+    
      //create row for age and runs getage function and sets return to cell
     var cellage = row1.insertCell(2);
     cellage.setAttribute("id","age");
-    cellage.innerHTML = countryage(objArray[i].country,objArray[i].yearnumber);
+    cellage.innerHTML = objArray[i].countryage();//using dot innerHTML to set countryage
+    
     //create row for the zodiac symbol, then runs zodiac funcion and stores returned into cell
     var cellzodiac = row1.insertCell(3); 
     cellzodiac.setAttribute("id","zodiac");
-    cellzodiac.innerHTML = zodiac(objArray[i].country, objArray[i].yearnumber, objArray[i].monthnumber, objArray[i].daynumber);
+    cellzodiac.innerHTML = objArray[i].zodiac();//using dot innerHTML to set cell with zodiac
   }
 }
-
-
-
-//function for finding chinese and western zodiac
-function zodiac(country,birthyear,birthmonth, birthday){
-  if(birthmonth <= 0 || birthmonth > 12){ //checks to see if month input is a valid month
-     return("invalid month")//invalid month return
-     }
-  else{
-    if(country === "China"){ //if the country is china use this
-        var ChineseZodiac = {animals : [ "Rooster", "Boar","Dog",  "Rat", "Tiger","Ox",  "Monkey","Rabbit", "Dragon", "Snake", "Horse", "Sheep"]};
-		return ChineseZodiac.animals[(birthyear % ChineseZodiac.animals.length)];
-    }    
-  else{ //else if its USA use this
-    var zodiac =['', 'Capricorn', 'Aquarius', 'Pisces', 'Aries', 'Taurus', 'Gemini', 
-                    'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn'];
-        var last_day =['', 19, 18, 20, 20, 21, 21, 22, 22, 21, 22, 21, 20, 19];
-        return (birthday > last_day[birthmonth]) ? zodiac[birthmonth*1 + 1] : zodiac[birthmonth];
-  }
-  }
-}
-
-
-//function to get age for input data, returns age for USA and age+1 for China
-function countryage(country, yearofbirth){
-  var currentTime = new Date();
-  var year = currentTime.getFullYear();
-  if (country == 'China')
-    return (year - yearofbirth)+1;
-  else 
-    return (year - yearofbirth);
-}
-
-        // function for finding localname orientaion based on country
-function countryname(country, firstname, lastname){
-  if(country == 'China')
-    return (lastname + " "+firstname);
-  else
-    return (firstname + " "+ lastname);
-}
-
-        //function for finding local age orientation based on counrty
-function localbirth(country,day,month,year){
-  if(country == 'China')
-    return(year+"-"+month+"-"+day); 
-  else
-    return(month+"-"+day+"-"+year); 
-}
-												</script>
+							</script>
 
 											</body>
 
