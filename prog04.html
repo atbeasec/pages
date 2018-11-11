@@ -202,10 +202,10 @@ function genObjectArray() {
 	objArray.forEach(function(e) {
 		divContent += '<li>';
 		divContent += JSON.stringify(e);
-    divContent += ' countryage() == ' + countryage(e.country, e.yearnumber);
-    divContent += ' countryname() == ' + countryname(e.country, e.fname, e.lname);
-     divContent += 'zodiac() == ' + zodiac(e.country,e.yearnumber,e.monthnumber,e.daynumber);
-     divContent += 'localbirth() ==' + localbirth(e.country,e.daynumber,e.monthnumber,e.yearnumber);
+    divContent += '..... countryage() == ' + countryage(e.country, e.yearnumber);
+    divContent += '..... countryname() == ' + countryname(e.country, e.fname, e.lname);
+     divContent += '..... zodiac() == ' + zodiac(e.country,e.yearnumber,e.monthnumber,e.daynumber);
+     divContent += '..... localbirth() ==' + localbirth(e.country,e.daynumber,e.monthnumber,e.yearnumber);
 		divContent += '</li>';
 	});
 	document.getElementById("div2").innerHTML = divContent;
