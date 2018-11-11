@@ -15,9 +15,7 @@
 			text-align: right;
 			padding-right: 15px;
       margin-left: 10px;
-
 		}
-
 		input[type="number"] {
 			width:50px;
 			margin-right: 10px;
@@ -59,40 +57,32 @@
 			<div id="div3">
 			</div>
 			<script>
-
 // GLOBAL VARIABLES
-
 var currentLine = 0;
 var inputWidth  = 10;
 var objArray    = [];
-
 // FUNCTIONS
-
 /* addForm()
  * appends an entry form to an HTML element with id="div1"
  */
 function addForm() {
 	// precondition: HTML must contain <div id="div1"> element
-
 	// create a new form element, and append to div1
 	var newelement = document.createElement("form");
 	newelement.setAttribute("id","form1");
 	var div1 = document.getElementById("div1");
 	div1.appendChild(newelement);
-
 	// create a new fieldset element, and append to form1
 	var newelement = document.createElement("fieldset");
 	newelement.setAttribute("id","fieldset1");
 	var form1 = document.getElementById("form1");
 	form1.appendChild(newelement);
-
 	// create a new legend element, and append to fieldset1
 	var newelement = document.createElement("legend");
 	var textnode = document.createTextNode("People ");
 	newelement.appendChild(textnode);
 	var fieldset1 = document.getElementById("fieldset1");
 	fieldset1.appendChild(newelement);
-
 	// create a new label element, and append to fieldset1
 	var newelement = document.createElement("label");
 	newelement.setAttribute("for","fname"+currentLine);
@@ -100,7 +90,6 @@ function addForm() {
 	newelement.appendChild(textnode);
 	var fieldset1 = document.getElementById("fieldset1");
 	fieldset1.appendChild(newelement);
-
 	// create a new input element, and append to fieldset1
 	var newelement = document.createElement("input");
 	newelement.setAttribute("name","fname"+currentLine);
@@ -111,23 +100,19 @@ function addForm() {
 	if (currentLine==0) newelement.setAttribute("autofocus","autofocus");
 	var fieldset1 = document.getElementById("fieldset1");
 	fieldset1.appendChild(newelement);
-
 	// add more fields 
 	addField("fieldset1", "lname", "Last", "text", "Doe", inputWidth);
 	addField("fieldset1", "daynumber", "Solar birth day", "number", "00", inputWidth);
   addField("fieldset1", "monthnumber", "Solar birth month", "number", "00", inputWidth);
   addField("fieldset1", "yearnumber", "Solar birth year", "number", "0000", inputWidth);
 	addcountry();
-
 	// add line break 
 	var newelement = document.createElement("br");
 	var fieldset1 = document.getElementById("fieldset1");
 	fieldset1.appendChild(newelement);
-
 	// increment line counter
 	currentLine++;
 }
-
 /* addLine()
  * inserts all labels and input elements for one row of a form
  */
@@ -145,7 +130,6 @@ function addLine () {
 	fieldset1.appendChild(newelement);
 	currentLine++;
 }
-
 /* addField()
  * inserts one label one input element into a row of a form 
  */
@@ -153,7 +137,6 @@ function addField(formId, namePrefix, labelText, dataType, placeholder, fieldSiz
 	// precondition: currentLine (global variable) must be set
 	// precondition: objArray[] (global variable) must be declared
 	// precondition: call from addLine() so HTML element with id=formID exists
-
 	// create a new label element, and append to form (or fieldset)
 	var n = document.createElement("label");
 	n.setAttribute("for",namePrefix+currentLine);
@@ -161,7 +144,6 @@ function addField(formId, namePrefix, labelText, dataType, placeholder, fieldSiz
 	n.appendChild(t);
 	var f = document.getElementById(formId);
 	f.appendChild(n);
-
 	// create a new input element, and append to form
 	var n = document.createElement("input");
 	n.setAttribute("name",namePrefix+currentLine);
@@ -174,7 +156,6 @@ function addField(formId, namePrefix, labelText, dataType, placeholder, fieldSiz
 }
 //function for adding country select option to form
 function addcountry() {
-
   var array = ["USA","China"]; //array for select list
  //creating label and appending
   var n = document.createElement("label");
@@ -197,9 +178,7 @@ function addcountry() {
     option.text = array[i];
     n.appendChild(option);
   }
-
 }
-
 /* genObjectArray()
  * generates content for an array of objects, 
  * where each element of the array 
@@ -208,7 +187,6 @@ function addcountry() {
 function genObjectArray() {
 	// precondition: HTML must contain <div id="div2"> element
 	// precondition: currentLine (global variable) must be set
-
 	// generate objArray from HTML form elements
 	for(i = 0; i < currentLine; i++) {
 		objArray[i] = {
@@ -219,37 +197,33 @@ function genObjectArray() {
       'yearnumber'  :parseInt(document.getElementById("yearnumber"+i).value)?parseInt(document.getElementById("yearnumber"+i).value):0,
       'country'     :document.getElementById("country"+i).value,
 	};
-
 	// display objArray
 	var divContent = "<ol start='0'>";
 	objArray.forEach(function(e) {
 		divContent += '<li>';
 		divContent += JSON.stringify(e);
     divContent += ' countryage() == ' + countryage(e.country, e.yearnumber);
+    divContent += ' countryname() == ' + countryname(e.country, e.fname, e.lname);
+     divContent += 'zodiac() == ' + zodiac(e.country,e.yearnumber,e.monthnumber,e.daynumber);
+     divContent += 'localbirth() ==' + localbirth(e.country,e.daynumber,e.monthnumber,e.yearnumber);
 		divContent += '</li>';
 	});
-
 	document.getElementById("div2").innerHTML = divContent;
 }
 }
 //generate table array
 function genTable(){
-
   var div3 = document.getElementById("div3");  //clear already existing table so no extra table is created
   while(div3.firstChild){
     div3.removeChild(div3.firstChild);
   }
-
   genObjectArray(); //running genarray to make sure it is created for table
   var arraylength = objArray.length;
   var newtable = document.createElement("table");
 	newtable.setAttribute("id","table1");
-
   newtable.setAttribute("class","table table-striped table-bordered"); //sets zebra striped table
 	var div3 = document.getElementById("div3");
 	div3.appendChild(newtable);
-
-
   //creating labled colums for table
         var table = document.getElementById("table1");
         var row = table.insertRow(0);
@@ -266,32 +240,17 @@ function genTable(){
         cell4.setAttribute("id","zodiac");
         cell4.innerHTML = "Zodiac";
   for (i=0; i<arraylength;i++){ //loop to go through all of Object Array
-  
+
     var row1 = table.insertRow(i+1); //create row for name, checks country and stores correct layout into cell
     var cell1 = row1.insertCell(0);
     cell1.setAttribute("id","name1");
-    var firstname = objArray[i].fname.toString();
-    var lastname =  objArray[i].lname.toString();
-    if(objArray[i].country == 'China'){
-      cell1.innerHTML = lastname + " " + firstname;
-    }
-    else{
-      cell1.innerHTML = firstname +" "+lastname;
-    }
+    cell1.innerHTML = countryname(objArray[i].country,objArray[i].fname,objArray[i].lname);
+
     //create cell for birthday, sets variables for each variable, and sets it to appropriate orrientation based on country
     var cellbirth = row1.insertCell(1);
     cellbirth.setAttribute("id","birth");
-    var month = objArray[i].monthnumber.toString();
-    var day = objArray[i].daynumber.toString();
-    var year = objArray[i].yearnumber.toString();
-    var usbirth = month+"-"+day+"-"+year;
-    var chinabirth = year+"-"+month+"-"+day;
-    if(objArray[i].country =='China'){
-      cellbirth.innerHTML=chinabirth; //if china
-    }
-    else{ // if USA
-      cellbirth.innerHTML=usbirth;
-    }
+    cellbirth.innerHTML=localbirth(objArray[i].country,objArray[i].daynumber,objArray[i].monthnumber,objArray[i].yearnumber);
+
      //create row for age and runs getage function and sets return to cell
     var cellage = row1.insertCell(2);
     cellage.setAttribute("id","age");
@@ -300,11 +259,10 @@ function genTable(){
     var cellzodiac = row1.insertCell(3); 
     cellzodiac.setAttribute("id","zodiac");
     cellzodiac.innerHTML = zodiac(objArray[i].country, objArray[i].yearnumber, objArray[i].monthnumber, objArray[i].daynumber);
-
   }
-
-
 }
+
+
 
 //function for finding chinese and western zodiac
 function zodiac(country,birthyear,birthmonth, birthday){
@@ -314,7 +272,6 @@ function zodiac(country,birthyear,birthmonth, birthday){
   else{
     if(country === "China"){ //if the country is china use this
         var ChineseZodiac = {animals : [ "Rooster", "Boar","Dog",  "Rat", "Tiger","Ox",  "Monkey","Rabbit", "Dragon", "Snake", "Horse", "Sheep"]};
-
 		return ChineseZodiac.animals[(birthyear % ChineseZodiac.animals.length)];
     }    
   else{ //else if its USA use this
@@ -326,6 +283,7 @@ function zodiac(country,birthyear,birthmonth, birthday){
   }
 }
 
+
 //function to get age for input data, returns age for USA and age+1 for China
 function countryage(country, yearofbirth){
   var currentTime = new Date();
@@ -336,11 +294,23 @@ function countryage(country, yearofbirth){
     return (year - yearofbirth);
 }
 
+        // function for finding localname orientaion based on country
+function countryname(country, firstname, lastname){
+  if(country == 'China')
+    return (lastname + " "+firstname);
+  else
+    return (firstname + " "+ lastname);
+}
+
+        //function for finding local age orientation based on counrty
+function localbirth(country,day,month,year){
+  if(country == 'China')
+    return(year+"-"+month+"-"+day); 
+  else
+    return(month+"-"+day+"-"+year); 
+}
 												</script>
 
 											</body>
 
 										</html>
-
-
-
